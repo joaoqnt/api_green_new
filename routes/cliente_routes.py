@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify
 from services.query_executor import execute_query
 
-cliente_bp = Blueprint('cliente', __name__, url_prefix='/api/<tenant_name>/cliente')
+cliente_bp = Blueprint('cliente', __name__,
+                       url_prefix='/api/<tenant_name>/cliente')
+
 
 @cliente_bp.route("/login_cliente", methods=['GET'])
 def login_cliente(tenant_name):
@@ -15,7 +17,9 @@ def login_cliente(tenant_name):
     # Consulta SQL
     stmt = """
         SELECT 
-            c.* 
+            c.*,
+            ce.nome as nome_email,
+            ce.data_validacao as data_validacao
         FROM cliente c
         INNER JOIN cliente_email ce ON ce.cliente = c.id
         WHERE ce.email = %s AND ce.senha = %s
